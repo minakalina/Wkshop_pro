@@ -1,0 +1,110 @@
+insert
+
+const jsonData = pm.response.json();
+
+pm.test("should have key mongo_id", function () { //เช็คว่าใส่key ของmongo มั้ย (_id)
+    pm.expect(jsonData.data).to.have.property('bakery_id');
+})
+
+
+pm.test("Content-Type is present", function () { //เช็คว่ามีheaderมั้ย
+    pm.response.to.have.header("Content-Type");
+});
+
+pm.test("Status code name has string", function () { //เช็คว่าสร้างยัง
+    pm.response.to.have.status("Created");
+});
+
+pm.test("Response time is less than 1000ms", function () { //เช็คว่าใช่เวลาตอบสนองไม่เกิน1000มั้ย
+    pm.expect(pm.response.responseTime).to.be.below(1000);
+});
+
+pm.test("Successful GET or POST request", function () { //เช็คการตอบสนองว่าเป็น200(get),201(post)มั้ย
+    pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+});
+
+
+-----------------------------------
+
+get  (Find)
+
+
+const jsonData = pm.response.json();
+
+                                            // เช็คการตอบสนองส่งค่ามาเป็น200ไหม
+pm.test("response is ok", function () {
+    pm.response.to.have.status(200);
+pm.sendRequest("https://postman-echo.com/get", function (err, response) {
+    console.log(response.json());
+});
+});
+
+
+pm.test("Body matches string", function () { //เช็คbody json มีตามฟิลใช้เก็บข้อมูลตรงตามข้างล่างไหม
+    pm.expect(pm.response.text()).to.include("menu_name");
+    pm.expect(pm.response.text()).to.include("menu_type");
+    pm.expect(pm.response.text()).to.include("price");
+    pm.expect(pm.response.text()).to.include("piece");
+    pm.expect(pm.response.text()).to.include("picture_url");
+});
+
+pm.test("Check if menutype 2 is tart", function () { //เช็คข้อมูลโดยเลือกตัวที่2 ว่า ชนิดสินค้าเป็น tart ไหม
+    var jsonData = pm.response.json();
+     pm.expect(jsonData.data[1].menu_type).to.eql('tart');
+ });
+
+pm.test("Content-Type is present", function () { //เช็คว่ามีheaderไหม
+    pm.response.to.have.header("Content-Type");
+});
+
+pm.test("Status code name has string", function () { //เช็คว่าstatusตอนส่งมาเป็น0kไหม
+    pm.response.to.have.status("OK");
+});
+
+pm.test("Response time is less than 1000ms", function () { //เช็คว่าใช่เวลาตอบสนองไม่เกิน1000มั้ย
+    pm.expect(pm.response.responseTime).to.be.below(1000);
+});
+
+pm.test("Successful GET or POST request", function () {  //เช็คการตอบสนองว่าเป็น200(get),201(post)มั้ย
+    pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+});
+
+pm.test("response must be valid and have a body", function () {
+     pm.response.to.be.ok;          //เช็คว่าการตอบสนองถูกต้อง ไม่ผิดพลาดมั้ย
+     pm.response.to.be.withBody;    //เช็คว่ามีbodyไหม
+     pm.response.to.be.json;        //ยืนยันการตรวจสอบว่าbodyมีจริง 
+});
+
+-----------------------------------
+
+
+update(patch)
+
+
+const jsonData = pm.response.json();
+
+pm.test("should have key mongo_id", function () { //อัพเดทไอดีที่เลือก
+    pm.expect(jsonData.data).to.have.property('bakery_id');
+})
+
+pm.test("should have key modified_count", function () { // แสดงจำนวนที่ได้อัพเดทไป จาก body
+    pm.expect(jsonData.data).to.have.property('modified_count');
+})
+
+
+-----------------------------------
+
+delete 
+
+
+const jsonData = pm.response.json();
+
+pm.test("should have key mongo_id", function () { //ลบไอดีที่เลือก
+    pm.expect(jsonData.data).to.have.property('bakery_id');
+})
+
+pm.test("should have key deleted_count", function () {  //จำนวนที่ลบไป
+    pm.expect(jsonData.data).to.have.property('deleted_count');
+})
+
+

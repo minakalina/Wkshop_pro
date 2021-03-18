@@ -89,7 +89,7 @@ def get_bakerys_by_id(bakerys_id: str = Path(None, min_length=10, max_length=10)
 
 #*******************************************************************************************************
 @app.post("/bakerys") #!ส่งMethod post เพื่อสร้างข้อมูลลงในdb
-def create_books(bakery: createBakeryModel): 
+def create_bakerys(bakery: createBakeryModel): 
     try:
         bakery_id = mongo_db.create(bakery) #!สร้างbakery_id ในตาราง bakery
     except:
@@ -109,7 +109,7 @@ def create_books(bakery: createBakeryModel):
 #!อัพเดทบางฟีลแค่นั้น ใช้ patch
 
 @app.patch("/bakerys/{bakery_id}") #!อัพเดทบางส่วนโดยส่งพารามิเตอร์ bakery_id เพื่อทำการอัพเดท
-def update_books(  
+def update_bakerys(  
     bakery: updateBakeryModel,  
     bakery_id: str = Path(None, min_length=10, max_length=10), #!ใส่IDอะไรก็ได้ไม่เกิน 10และไม่ต่ำกว่า10
 ):
@@ -144,7 +144,7 @@ def update_books(
 #*******************************************************************************************************
 
 @app.delete("/bakerys/{bakery_id}")  #! ลบข้อมูลโดยระบุID
-def delete_book_by_id(bakery_id: str = Path(None, min_length=10, max_length=10)): #!ใส่IDอะไรก็ได้ไม่เกิน 10และไม่ต่ำกว่า10
+def delete_bakery_by_id(bakery_id: str = Path(None, min_length=10, max_length=10)): #!ใส่IDอะไรก็ได้ไม่เกิน 10และไม่ต่ำกว่า10
     try:
         deleted_bakery_id, deleted_count = mongo_db.delete(bakery_id)
     except:
